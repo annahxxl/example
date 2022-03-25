@@ -2,8 +2,8 @@ name: Docker CI/CD
 
 on:
   push:
-    branches: [ main ]
-    
+    branches: [main]
+
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/example
   VERSION: ${{ github.sha }}
@@ -42,7 +42,7 @@ jobs:
   deploy:
     needs: build
     name: Deploy
-    runs-on: [ self-hosted, label-go ]
+    runs-on: [self-hosted, label-go]
     steps:
       - name: Login to GHCR
         uses: docker/login-action@v1
@@ -53,4 +53,4 @@ jobs:
       - name: Docker run
         run: |
           docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-          docker run -d -p 80:3000 --name example --restart always ${{ env.DOCKER_IMAGE }}:latest
+          docker run -d -p 80:3000 --name example -e DB_HOST=${{ secrets.DB_HOST }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_DATABASE=${{ secrets.DB_DATABASE }} --restart always ${{ env.DOCKER_IMAGE }}:latest
