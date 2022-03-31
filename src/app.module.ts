@@ -20,14 +20,14 @@ import { UsersModule } from './users/users.module';
       entities: [User],
       synchronize: true,
     }),
-    // CacheModule.registerAsync({
-    //   useFactory: async () => ({
-    //     store: redisStore,
-    //     host: process.env.REDIS_HOST,
-    //     port: parseInt(process.env.REDIS_PORT),
-    //     ttl: parseInt(process.env.REDIS_TTL),
-    //   }),
-    // }),
+    CacheModule.registerAsync({
+      useFactory: async () => ({
+        store: redisStore,
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT),
+        ttl: parseInt(process.env.REDIS_TTL),
+      }),
+    }),
     UsersModule,
   ],
   controllers: [AppController],
